@@ -1,0 +1,41 @@
+newrc
+=====
+
+Python netrc alternative with some extended capability
+
+
+Based on the standard library netrc module.
+
+The default behaviour is the same as the netrc module, and using
+
+    import newrc as netrc
+
+should work fine
+
+
+Extras
+------
+
+- Allow for multiple entries of the same host / machine. Optionally
+  select for a specific user, using the `authenticators2()` method.
+
+- Allow for POSIX-style parsing, with the `posix=True` argument to
+  `netrc()`. This allows whitespace in string by quoting them.
+
+  When using this option, values such as password containing comment
+  characters (default: #), single and double quotes should be quoted
+  or escaped. For example:
+
+      'password with whitespace'
+	  '###'
+	  'double"quote'
+	  'shell style '\'' single quote escaping'
+
+
+License
+-------
+
+Python Software Foundation license 
+
+PSF license for now, until I figured out how derivative work of Python
+module can be licensed.
