@@ -206,6 +206,36 @@ class NetrcTestCasePosix(NetrcTestCase):
             machine bar.domain.com login foo password pass
             """, '#pass')
 
+    def test_backslash_escape(self):
+        self._test_comment("""\
+            machine foo.domain.com login bar password \#pass #comment
+            machine bar.domain.com login foo password pass
+            """, '#pass')
+
+    def test_quoting(self):
+        self._test_comment("""\
+            machine foo.domain.com login bar password "#pass" #comment
+            machine bar.domain.com login foo password pass
+            """, '#pass')
+        self._test_comment("""\
+            machine foo.domain.com login bar password '#p"ass' #comment
+            machine bar.domain.com login foo password pass
+            """, '#p"ass')
+        self._test_comment("""\
+            machine foo.domain.com login bar password "#pa'ss" #comment
+            machine bar.domain.com login foo password pass
+            """, "#pa'ss")
+        # Shell-style single quote escape
+        self._test_comment("""\
+            machine foo.domain.com login bar password '#pas'\\''s' #comment
+            machine bar.domain.com login foo password pass
+            """, "#pas's")
+
+
+class NetrcAuthethenticatorTestCase(unittest.TestCase):
+    pass
+
+
 
 def test_main():
     support.run_unittest(NetrcTestCase)
