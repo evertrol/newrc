@@ -13,7 +13,7 @@ import stat
 from collections import defaultdict, namedtuple
 
 
-__all__ = ["netrc", "NetrcParseError"]
+__all__ = ["netrc", "NetrcParseError", "Attrs"]
 
 
 Attrs = namedtuple('attrs', ['login', 'account', 'password'])
@@ -231,6 +231,4 @@ if __name__ == '__main__':
         text = netrc(sys.argv[1], posix=True)
     except IndexError:
         text = netrc()
-    print()
     print(text)
-
