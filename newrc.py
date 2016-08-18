@@ -53,7 +53,6 @@ class netrc(object):
             self.hosts[name] = tuple(attrs[0])
 
     def _parse(self, filename, fp):
-        print(filename)
         lexer = shlex.shlex(fp, posix=self.posix)
         lexer.wordchars += r"""!$%&()*+,-./:;<=>?@[\]^_`{|}~"""
         if not self.posix:
@@ -100,14 +99,12 @@ class netrc(object):
             account = password = None
             while True:
                 tt = lexer.get_token()
-                print(tt)
                 if (tt in {lexer.eof, 'machine', 'default', 'macdef'} or
                     tt.startswith('#')):
                     if password:
                         attrs = Attrs(login=login,
                                       account=account,
                                       password=password)
-                        print(attrs)
                         if entryname == 'default':
                             # allow only default one entry
                             self.hosts2['default'] = [attrs]

@@ -166,7 +166,7 @@ class NetrcTestCasePosix(NetrcTestCase):
         acct = 'acct' if account is False else account
         self.assertEqual(nrc.hosts['host.domain.com'], ('log', acct, passwd))
 
-        
+
     def test_password_with_leading_hash(self):
         with self.assertRaises(netrc.NetrcParseError):
             self._test_passwords("""\
@@ -183,6 +183,28 @@ class NetrcTestCasePosix(NetrcTestCase):
         self._test_passwords("""\
             machine host.domain.com login log password 'pass#' account acct
             """, 'pass#')
+
+    def test_password_with_internal_hash(self):
+        # default style
+        self._test_passwords("""\
+            machine host.domain.com login log password pa#ss account acct
+            """, 'pa', account=None)
+        # POSIX style
+        self._test_passwords("""\
+            machine host.domain.com login log password 'pa#ss' account acct
+            """, 'pa#ss')
+
+    def test_comment_at_end_of_machine_line_pass_has_hash(self):
+        # default style
+        with self.assertRaises(netrc.NetrcParseError):
+            self._test_comment("""\
+            machine foo.domain.com login bar password #pass #comment
+            machine bar.domain.com login foo password pass
+            """, '#pass')
+        self._test_comment("""\
+            machine foo.domain.com login bar password '#pass' #comment
+            machine bar.domain.com login foo password pass
+            """, '#pass')
 
 
 def test_main():
